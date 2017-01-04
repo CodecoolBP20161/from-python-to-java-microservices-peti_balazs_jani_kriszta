@@ -9,4 +9,6 @@ public interface ReviewDao {
     void remove(int id);
     ArrayList<Review> getByClientID(int clientID);
     ArrayList<Review> getByProductName(String productName);
+    ArrayList<Review> getApprovedByClientId(int clientID);
+    ArrayList<Review> getApprovedByProductName(String productName);
 }

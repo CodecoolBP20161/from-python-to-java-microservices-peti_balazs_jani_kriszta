@@ -17,7 +17,7 @@ public class Client {
         APIKey = createAPIKey();
     }
 
-    Client(String name, String email, String APIKey){
+    public Client(String name, String email, String APIKey){
         this.name = name;
         this.email = email;
         this.APIKey = APIKey;

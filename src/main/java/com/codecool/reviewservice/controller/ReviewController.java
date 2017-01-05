@@ -4,6 +4,7 @@ import com.codecool.reviewservice.dao.ClientDao;
 import com.codecool.reviewservice.dao.ReviewDao;
 import com.codecool.reviewservice.dao.implementation.ClientDaoJdbc;
 import com.codecool.reviewservice.dao.implementation.ReviewDaoJdbc;
+import com.codecool.reviewservice.email.Email;
 import com.codecool.reviewservice.errorHandling.InvalidClient;
 import com.codecool.reviewservice.model.Client;
 import com.codecool.reviewservice.model.Review;
@@ -25,28 +26,24 @@ public class ReviewController {
     private static ClientDao clients = ClientDaoJdbc.getInstance();
 
 
-    public static String createReview(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
+    public static String newReview(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
         System.out.println("kaki");
-        String email;
-
         String APIKey = request.params("APIKey");
 
         if (!validateClient(APIKey)) {
             throw new InvalidClient("Client is not found in database.");
         } else {
             Review newReview = new Review(getClientID(APIKey),
-                    request.params("productName"),
-                    request.params("comment"),
-                    Integer.parseInt(request.params("ratings")));
+                                          request.params("productName"),
+                                          request.params("comment"),
+                                          Integer.parseInt(request.params("ratings")));
             reviews.add(newReview);
-            email = newReview.toString();
-//            EmailAPIService.sendReviewForModerating(email);
-            return new Gson().toJson(email);
+            Email.ReviewForModerationEmail(newReview);
+            return null;
         }
     }
 
     public static String changeStatus(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
-        System.out.println("kaki");
         String APIKey = request.params("APIKey");
 
         if (!validateClient(APIKey)) {

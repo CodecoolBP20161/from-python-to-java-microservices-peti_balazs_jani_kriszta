@@ -90,6 +90,12 @@ public class Review {
 
     @Override
     public String toString(){
-        return String.format("client_id: %s product_name: %s comment: %s ratings: %d review_key: %s status: %s",getClientID(),getProductName(),getComment(),getRating(),getReviewKey(),getStatus());
+        return String.format(
+                        "Client_id: %s \n" +
+                        "Product name: %s \n" +
+                        "Review: %s \n" +
+                        "Ratings: %d \n" +
+                        "Review Key: %s \n" +
+                        "Status: %s", getClientID(),getProductName(),getComment(),getRating(),getReviewKey(),getStatus());
     }
 }

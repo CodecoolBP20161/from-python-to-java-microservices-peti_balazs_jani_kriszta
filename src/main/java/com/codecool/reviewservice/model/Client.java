@@ -63,6 +63,9 @@ public class Client {
 
     @Override
     public String toString(){
-        return String.format("Api_key: %s Name: %s Email: %s",getAPIKey(),getName(),getEmail());
+        return String.format("" +
+                "Company name: %s\n" +
+                "Email address: %s\n" +
+                "API Key: %s\n", getName(), getEmail(), getAPIKey());
     }
 }

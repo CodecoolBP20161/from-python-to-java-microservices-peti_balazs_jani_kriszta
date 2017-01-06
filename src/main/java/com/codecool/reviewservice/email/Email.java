@@ -16,15 +16,18 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 
 public class Email {
     private static ReviewDao reviews = ReviewDaoJdbc.getInstance();
     private static ClientDao clients = ClientDaoJdbc.getInstance();
 
+    ResourceBundle rb = ResourceBundle.getBundle("emaildata"); // connection.properties
+    private final String FROM  = rb.getString("address");
+    private final String password = rb.getString("password");
+
     String to;
-    private final String FROM = "myhorseshoeisamazing@gmail.com";
-    private final String password = "codecool";
     String subject;
     String body;
 

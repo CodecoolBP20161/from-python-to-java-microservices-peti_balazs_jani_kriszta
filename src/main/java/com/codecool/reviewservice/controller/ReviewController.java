@@ -25,9 +25,14 @@ public class ReviewController {
     private static ReviewDao reviews = ReviewDaoJdbc.getInstance();
     private static ClientDao clients = ClientDaoJdbc.getInstance();
 
+    public static final String API_KEY_PARAM = "APIKey";
+    public static final String PRODUCT_NAME_PARAM = "productName";
+
 
     public static String newReview(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
         String APIKey = request.params("APIKey");
+        logger.info("New review from client with APIKey: " + APIKey + ", and Product: " + request.params("productName"));
+
 
         if (!validateClient(APIKey)) {
             throw new InvalidClient("Client is not found in database.");
@@ -43,6 +48,7 @@ public class ReviewController {
     }
 
     public static String changeStatus(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
+        logger.info("Changing status of review...");
         String APIKey = request.params("APIKey");
 
         if (!validateClient(APIKey)) {
@@ -74,8 +80,11 @@ public class ReviewController {
     }
 
     public static String getAllReviewOfProduct(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
-        String APIKey = request.params("APIKey");
-        String productName = request.params("productName");
+        String APIKey = request.params(API_KEY_PARAM);
+        String productName = request.params(PRODUCT_NAME_PARAM);
+
+        logger.info("Request from user with APIKey: " + APIKey);
+        logger.info("Request for all approved reviews of: " + productName);
 
         ArrayList<String> approvedReviews = new ArrayList<>();
 

@@ -27,11 +27,11 @@ public class Server {
         port(61000);
 
         // Routes
-        get("/newClient", (request, response) -> ClientController.newClient(request, response));
+        get("/newClient", ClientController::newClient);
         post("/review/:APIKey/:productName/:ratings", ReviewController::newReview);
-        get("/changeStatus/:APIKey/:reviewKey/:status", (request, response) -> ReviewController.changeStatus(request, response));
-        get("/reviewFromClient/:APIKey", (request, response) -> ReviewController.getAllReviewFromClient(request, response));
-        get("/allReviewOfProduct/:APIKey/:ProductName", (request, response) -> ReviewController.getAllReviewOfProduct(request, response));
+        get("/changeStatus/:APIKey/:reviewKey/:status", ReviewController::changeStatus);
+        get("/reviewFromClient/:APIKey", ReviewController::getAllReviewFromClient);
+        get("/allReviewOfProduct/:APIKey/:productName", ReviewController::getAllReviewOfProduct);
         get("/", RegistrationPageController::renderRegistrationPage, tmp);
 
         get("/success",  (req, res) -> "Successful registration");

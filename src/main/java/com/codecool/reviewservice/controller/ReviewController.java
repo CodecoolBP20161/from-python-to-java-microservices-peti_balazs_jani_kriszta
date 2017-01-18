@@ -27,16 +27,15 @@ public class ReviewController {
 
 
     public static String newReview(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
-        System.out.println("kaki");
         String APIKey = request.params("APIKey");
 
         if (!validateClient(APIKey)) {
             throw new InvalidClient("Client is not found in database.");
         } else {
             Review newReview = new Review(getClientID(APIKey),
-                                          request.params("productName"),
-                                          request.params("comment"),
-                                          Integer.parseInt(request.params("ratings")));
+                    request.params("productName"),
+                    request.body(),
+                    Integer.parseInt(request.params("ratings")));
             reviews.add(newReview);
             Email.ReviewForModerationEmail(newReview);
             return null;

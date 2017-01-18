@@ -28,7 +28,7 @@ public class Server {
 
         // Routes
         get("/newClient", (request, response) -> ClientController.newClient(request, response));
-        get("/review/:APIKey/:productName/:comment/:ratings", (request, response) -> ReviewController.newReview(request, response));
+        post("/review/:APIKey/:productName/:ratings", ReviewController::newReview);
         get("/changeStatus/:APIKey/:reviewKey/:status", (request, response) -> ReviewController.changeStatus(request, response));
         get("/reviewFromClient/:APIKey", (request, response) -> ReviewController.getAllReviewFromClient(request, response));
         get("/allReviewOfProduct/:APIKey/:ProductName", (request, response) -> ReviewController.getAllReviewOfProduct(request, response));

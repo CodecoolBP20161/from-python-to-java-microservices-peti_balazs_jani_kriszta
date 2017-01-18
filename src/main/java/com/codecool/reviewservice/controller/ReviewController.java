@@ -83,7 +83,7 @@ public class ReviewController {
         String APIKey = request.params(API_KEY_PARAM);
         String productName = request.params(PRODUCT_NAME_PARAM);
 
-        logger.info("Request from user with APIKey: " + APIKey);
+        logger.info("Request from client with APIKey: " + APIKey);
         logger.info("Request for all approved reviews of: " + productName);
 
         ArrayList<String> approvedReviews = new ArrayList<>();

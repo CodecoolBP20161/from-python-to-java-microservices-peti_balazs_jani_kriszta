@@ -16,15 +16,18 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 
 public class Email {
     private static ReviewDao reviews = ReviewDaoJdbc.getInstance();
     private static ClientDao clients = ClientDaoJdbc.getInstance();
 
+    ResourceBundle rb = ResourceBundle.getBundle("emaildata"); // connection.properties
+    private final String FROM  = rb.getString("address");
+    private final String password = rb.getString("password");
+
     String to;
-    private final String FROM = "myhorseshoeisamazing@gmail.com";
-    private final String password = "codecool";
     String subject;
     String body;
 
@@ -77,8 +80,8 @@ public class Email {
                       "\n" +
                       review.toString() +
 
-                      "\n\nTo accept the review, click on the link below:\n http://localhost:8888/changeStatus/" + client.getAPIKey() + "/" + review.getReviewKey()+ "/approved" +
-                      "\nTo deny it from being displayed on your site, click on this one:\n http://localhost:8888/changeStatus/" + client.getAPIKey() + "/" + review.getReviewKey()+ "/denied" +
+                      "\n\nTo accept the review, click on the link below:\n http://localhost:61000/changeStatus/" + client.getAPIKey() + "/" + review.getReviewKey()+ "/approved" +
+                      "\nTo deny it from being displayed on your site, click on this one:\n http://localhost:61000/changeStatus/" + client.getAPIKey() + "/" + review.getReviewKey()+ "/denied" +
                       "\nBest regards,\n" +
                       "     Horseshoe Team";
 
@@ -101,8 +104,6 @@ public class Email {
         props.put("mail.store.protocol", "pop3");
         props.put("mail.transport.protocol", "smtp");
 
-//        final String username = email.getFROM();
-//        final String password = email.getPassword();
         try {
             Session session = Session.getDefaultInstance(props,
                     new Authenticator() {

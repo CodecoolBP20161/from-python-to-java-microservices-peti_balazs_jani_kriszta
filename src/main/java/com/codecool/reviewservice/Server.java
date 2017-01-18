@@ -24,7 +24,7 @@ public class Server {
         // Default server settings
         exception(Exception.class, (e, req, res) -> e.printStackTrace());
         staticFileLocation("/public");
-        port(8888);
+        port(61000);
 
         // Routes
         get("/newClient", (request, response) -> ClientController.newClient(request, response));
@@ -33,6 +33,7 @@ public class Server {
         get("/reviewFromClient/:APIKey", (request, response) -> ReviewController.getAllReviewFromClient(request, response));
         get("/allReviewOfProduct/:APIKey/:ProductName", (request, response) -> ReviewController.getAllReviewOfProduct(request, response));
         get("/", RegistrationPageController::renderRegistrationPage, tmp);
+
         get("/success",  (req, res) -> "Successful registration");
         get("/newStatus", (req, res) -> "New status of review has been set");
     }

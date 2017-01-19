@@ -25,25 +25,31 @@ public class ReviewController {
     private static ReviewDao reviews = ReviewDaoJdbc.getInstance();
     private static ClientDao clients = ClientDaoJdbc.getInstance();
 
+    public static final String API_KEY_PARAM = "APIKey";
+    public static final String PRODUCT_NAME_PARAM = "productName";
+
 
     public static String newReview(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
-        System.out.println("kaki");
         String APIKey = request.params("APIKey");
+        logger.info("New review from client with APIKey: " + APIKey + ", and Product: " + request.params("productName"));
 
         if (!validateClient(APIKey)) {
+            response.status(404);
             throw new InvalidClient("Client is not found in database.");
         } else {
             Review newReview = new Review(getClientID(APIKey),
-                                          request.params("productName"),
-                                          request.params("comment"),
-                                          Integer.parseInt(request.params("ratings")));
+                    request.params("productName"),
+                    request.body(),
+                    Integer.parseInt(request.params("ratings")));
             reviews.add(newReview);
             Email.ReviewForModerationEmail(newReview);
+            response.status(200);
             return null;
         }
     }
 
     public static String changeStatus(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
+        logger.info("Changing status of review...");
         String APIKey = request.params("APIKey");
 
         if (!validateClient(APIKey)) {
@@ -75,8 +81,11 @@ public class ReviewController {
     }
 
     public static String getAllReviewOfProduct(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
-        String APIKey = request.params("APIKey");
-        String productName = request.params("productName");
+        String APIKey = request.params(API_KEY_PARAM);
+        String productName = request.params(PRODUCT_NAME_PARAM);
+
+        logger.info("Request from client with APIKey: " + APIKey);
+        logger.info("Request for all approved reviews of: " + productName);
 
         ArrayList<String> approvedReviews = new ArrayList<>();
 
@@ -84,6 +93,7 @@ public class ReviewController {
             throw new InvalidClient("Client is not found in database.");
         } else {
             ArrayList<Review> returnReviews = reviews.getApprovedByProductName(productName.replace(" ", "").toUpperCase());
+            logger.info("Converting review objects to string: " + returnReviews);
             for (Review review : returnReviews) {
                 approvedReviews.add(review.toString());
             }
@@ -104,6 +114,8 @@ public class ReviewController {
     }
 
     private static String jsonify(ArrayList<String> list) {
+        String result = new Gson().toJson(list);
+        logger.info("Reviews jasonified: " + result);
         return new Gson().toJson(list);
     }
 

@@ -44,3 +44,6 @@ fabric.properties
 from-python-to-java-microservices-peti_balazs_jani_kriszta.iml
 *.iml
 target/
+
+connection.properties
+emaildata.properties

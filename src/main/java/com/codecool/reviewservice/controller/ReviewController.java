@@ -80,7 +80,7 @@ public class ReviewController {
         }
     }
 
-    public static String getAllReviewOfProduct(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
+    public static ArrayList<String> getAllReviewOfProduct(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
         String APIKey = request.params(API_KEY_PARAM);
         String productName = request.params(PRODUCT_NAME_PARAM);
 
@@ -95,9 +95,9 @@ public class ReviewController {
             ArrayList<Review> returnReviews = reviews.getApprovedByProductName(productName.replace(" ", "").toUpperCase());
             logger.info("Converting review objects to string: " + returnReviews);
             for (Review review : returnReviews) {
-                approvedReviews.add(review.toString());
+                approvedReviews.add(jsonifyObject(review));
             }
-            return jsonify(approvedReviews);
+            return approvedReviews;
         }
     }
 
@@ -119,4 +119,10 @@ public class ReviewController {
         return new Gson().toJson(list);
     }
 
+    private static String jsonifyObject(Review review) {
+        Gson gson = new Gson();
+        String jsonInString = gson.toJson(review);
+        logger.info("This is my json: " + jsonInString);
+        return jsonInString;
+    }
 }

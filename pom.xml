@@ -101,6 +101,12 @@
             <version>1.5.0-b01</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/javax.json/javax.json-api -->
+        <dependency>
+            <groupId>javax.json</groupId>
+            <artifactId>javax.json-api</artifactId>
+            <version>1.0</version>
+        </dependency>
 
     </dependencies>
 

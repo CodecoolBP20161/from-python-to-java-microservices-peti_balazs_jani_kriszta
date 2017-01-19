@@ -33,8 +33,8 @@ public class ReviewController {
         String APIKey = request.params("APIKey");
         logger.info("New review from client with APIKey: " + APIKey + ", and Product: " + request.params("productName"));
 
-
         if (!validateClient(APIKey)) {
+            response.status(404);
             throw new InvalidClient("Client is not found in database.");
         } else {
             Review newReview = new Review(getClientID(APIKey),
@@ -43,6 +43,7 @@ public class ReviewController {
                     Integer.parseInt(request.params("ratings")));
             reviews.add(newReview);
             Email.ReviewForModerationEmail(newReview);
+            response.status(200);
             return null;
         }
     }
@@ -92,6 +93,7 @@ public class ReviewController {
             throw new InvalidClient("Client is not found in database.");
         } else {
             ArrayList<Review> returnReviews = reviews.getApprovedByProductName(productName.replace(" ", "").toUpperCase());
+            logger.info("Converting review objects to string: " + returnReviews);
             for (Review review : returnReviews) {
                 approvedReviews.add(review.toString());
             }
@@ -112,6 +114,8 @@ public class ReviewController {
     }
 
     private static String jsonify(ArrayList<String> list) {
+        String result = new Gson().toJson(list);
+        logger.info("Reviews jasonified: " + result);
         return new Gson().toJson(list);
     }
 

@@ -93,7 +93,8 @@ public class ReviewDaoJdbc implements ReviewDao {
         try (Connection conn = connection.connect();
              Statement statement = conn.createStatement();
              ResultSet rs = statement.executeQuery(sql)){
-            if (rs.next()) {
+
+            while (rs.next()) {
                 Review review = new Review(rs.getInt("client_id"),
                         rs.getString("product_name"),
                         rs.getString("comment"),
@@ -102,7 +103,9 @@ public class ReviewDaoJdbc implements ReviewDao {
                         rs.getString("status"));
                 review.setId(rs.getString("id"));
                 reviews.add(review);
+                logger.info("review object: "+review.getComment());
             }
+            logger.info("review list: "+reviews);
                 return reviews;
         }catch (SQLException e) {
             e.printStackTrace();

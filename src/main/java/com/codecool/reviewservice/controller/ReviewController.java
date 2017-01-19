@@ -8,7 +8,7 @@ import com.codecool.reviewservice.email.Email;
 import com.codecool.reviewservice.errorHandling.InvalidClient;
 import com.codecool.reviewservice.model.Client;
 import com.codecool.reviewservice.model.Review;
-import com.google.gson.Gson;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.Request;
@@ -17,6 +17,7 @@ import spark.Response;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class ReviewController {
@@ -34,7 +35,6 @@ public class ReviewController {
         logger.info("New review from client with APIKey: " + APIKey + ", and Product: " + request.params("productName"));
 
         if (!validateClient(APIKey)) {
-            response.status(404);
             throw new InvalidClient("Client is not found in database.");
         } else {
             Review newReview = new Review(getClientID(APIKey),
@@ -63,42 +63,50 @@ public class ReviewController {
         }
     }
 
-    public static String getAllReviewFromClient(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
-        ArrayList<String> reviewsOfClient = new ArrayList<>();
+    public static JSONObject getAllReviewFromClient(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
+        String APIKey = request.params(API_KEY_PARAM);
+        int id = getClientID(APIKey);
 
-        String APIKey = request.params("APIKey");
+        logger.info("Getting all approved reviews from client with APIKey: " + APIKey);
 
         if (!validateClient(APIKey)) {
             throw new InvalidClient("Client is not found in database.");
-        } else {
-            ArrayList<Review> returnReviews = reviews.getApprovedByClientId(getClientID(APIKey));
-            for (Review review : returnReviews) {
-                reviewsOfClient.add(review.toString());
-            }
-
-            return jsonify(reviewsOfClient);
+        }  else {
+            ArrayList<Review> returnReviews = reviews.getApprovedByClientId(id);
+            return createJSONObject(returnReviews);
         }
     }
 
-    public static ArrayList<String> getAllReviewOfProduct(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
+    public static JSONObject getAllReviewOfProduct(Request request, Response response) throws IOException, URISyntaxException, InvalidClient {
         String APIKey = request.params(API_KEY_PARAM);
         String productName = request.params(PRODUCT_NAME_PARAM);
-
-        logger.info("Request from client with APIKey: " + APIKey);
-        logger.info("Request for all approved reviews of: " + productName);
-
-        ArrayList<String> approvedReviews = new ArrayList<>();
+        logger.info("Request from client with APIKey: " + APIKey+ " for all approved reviews of: " + productName);
 
         if (!validateClient(APIKey)) {
             throw new InvalidClient("Client is not found in database.");
         } else {
             ArrayList<Review> returnReviews = reviews.getApprovedByProductName(productName.replace(" ", "").toUpperCase());
-            logger.info("Converting review objects to string: " + returnReviews);
-            for (Review review : returnReviews) {
-                approvedReviews.add(jsonifyObject(review));
-            }
-            return approvedReviews;
+            return createJSONObject(returnReviews);
         }
+    }
+
+    private static JSONObject createJSONObject(ArrayList<Review> reviews){
+        JSONObject json = new JSONObject();
+        Integer idx = 1;
+        for (Review review : reviews) {
+            json.put(Integer.toString(idx), buildReviewMap(review));
+            idx++;
+        }
+        return json;
+    }
+
+    private static HashMap<String, String> buildReviewMap(Review review){
+        HashMap<String, String> mapReview = new HashMap<>();
+        mapReview.put("productName", review.getProductName());
+        mapReview.put("comment", review.getComment());
+        mapReview.put("ratings", String.valueOf(review.getRating()));
+        mapReview.put("reviewKey", review.getReviewKey());
+        return mapReview;
     }
 
     private static boolean validateClient(String APIKey) {
@@ -111,18 +119,5 @@ public class ReviewController {
 
     private static int getClientID(String APIKey){
         return clients.getByAPIKey(APIKey).getId();
-    }
-
-    private static String jsonify(ArrayList<String> list) {
-        String result = new Gson().toJson(list);
-        logger.info("Reviews jasonified: " + result);
-        return new Gson().toJson(list);
-    }
-
-    private static String jsonifyObject(Review review) {
-        Gson gson = new Gson();
-        String jsonInString = gson.toJson(review);
-        logger.info("This is my json: " + jsonInString);
-        return jsonInString;
     }
 }

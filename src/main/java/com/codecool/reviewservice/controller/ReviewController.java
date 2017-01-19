@@ -40,7 +40,8 @@ public class ReviewController {
             Review newReview = new Review(getClientID(APIKey),
                     request.params("productName"),
                     request.body(),
-                    Integer.parseInt(request.params("ratings")));
+                    Integer.parseInt(request.params("ratings")),
+                    request.params("userName"));
             reviews.add(newReview);
             Email.ReviewForModerationEmail(newReview);
             response.status(200);

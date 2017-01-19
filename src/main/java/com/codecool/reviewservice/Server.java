@@ -28,7 +28,7 @@ public class Server {
 
         // Routes
         get("/newClient", ClientController::newClient);
-        post("/review/:APIKey/:productName/:ratings", ReviewController::newReview);
+        post("/review/:APIKey/:productName/:ratings/:userName", ReviewController::newReview);
         get("/changeStatus/:APIKey/:reviewKey/:status", ReviewController::changeStatus);
         get("/reviewFromClient/:APIKey", ReviewController::getAllReviewFromClient);
         get("/allReviewOfProduct/:APIKey/:productName", ReviewController::getAllReviewOfProduct);

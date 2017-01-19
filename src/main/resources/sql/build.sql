@@ -18,5 +18,6 @@ comment varchar,
 ratings INTEGER,
 review_key VARCHAR,
 status VARCHAR,
+user_name VARCHAR,
 FOREIGN KEY (client_id) REFERENCES client(id)
 );

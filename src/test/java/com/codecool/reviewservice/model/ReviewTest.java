@@ -6,8 +6,9 @@ import static org.junit.Assert.assertEquals;
 
 public class ReviewTest {
 
-    Review review = new Review(2, "So me Thing", "This is comment", 4);
-    Review reviewWithKey = new Review(3, "What ELse", "wtf", 2, "7abc9587-2f0f-4059-87e8-349edaf7f247", "Status");
+    Review review = new Review(2, "So me Thing", "This is comment", 4, "Jack");
+    Review reviewWithKey = new Review(3, "What ELse", "wtf", 2, "7abc9587-2f0f-4059-87e8-349edaf7f247", "Status",
+            "Thomas");
 
     @Test
     public void getStatus() throws Exception {

@@ -34,9 +34,11 @@ public class ReviewDaoJdbc implements ReviewDao {
         int ratings = reviewModel.getRating();
         String reviewKey = reviewModel.getReviewKey();
         String status = reviewModel.getStatus();
+        String userName = reviewModel.getUserName();
 
-        sql = "INSERT INTO review (client_id, product_name, comment, ratings, review_key, status) " +
-                "VALUES("+clientId+",'"+productName+"','"+comment+"',"+ratings+",'"+reviewKey+"', '"+status+"');";
+        sql = "INSERT INTO review (client_id, product_name, comment, ratings, review_key, status, user_name) " +
+                "VALUES("+clientId+",'"+productName+"','"+comment+"',"+ratings+",'"+reviewKey+"', '"+status+"'," +
+                "'"+userName+"');";
         connection.executeQuery(sql);
         logger.debug("Save to database | Review model: "+reviewModel);
     }
@@ -100,7 +102,8 @@ public class ReviewDaoJdbc implements ReviewDao {
                         rs.getString("comment"),
                         rs.getInt("ratings"),
                         rs.getString("review_key"),
-                        rs.getString("status"));
+                        rs.getString("status"),
+                        rs.getString("user_name"));
                 review.setId(rs.getString("id"));
                 reviews.add(review);
                 logger.info("review object: "+review.getComment());

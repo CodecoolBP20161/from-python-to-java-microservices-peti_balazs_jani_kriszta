@@ -16,27 +16,31 @@ public class Review {
     private int rating;
     private String status;
     private String reviewKey;
+    private String userName;
 
 //    Constructor without reviewKey, it generates new
-    public Review(int clientID, String productName, String comment, int rating) {
+    public Review(int clientID, String productName, String comment, int rating, String userName) {
         this.clientID = clientID;
         this.productName = handleProductName(productName);
         this.comment = comment;
         this.rating = rating;
         this.status = Status.PENDING.toString();
         this.reviewKey = UUID.randomUUID().toString();
+        this.userName = userName;
 
         logger.info("Create new Review model with new reviewKey: " + this.reviewKey + " Status: " + this.status);
     }
 
 //    Constructor with reviewKey
-    public Review(int clientID, String productName, String comment, int rating, String reviewKey, String status) {
+    public Review(int clientID, String productName, String comment, int rating, String reviewKey, String status,
+                  String username) {
         this.clientID = clientID;
         this.productName = productName;
         this.comment = comment;
         this.rating = rating;
         this.reviewKey = reviewKey;
         this.status = status;
+        this.userName = username;
 
         logger.info("Create Review model with the reviewKey: " + this.reviewKey + " Status: " + this.status);
 
@@ -88,6 +92,8 @@ public class Review {
         return reviewKey;
     }
 
+    public String getUserName() {return userName;}
+
     @Override
     public String toString(){
         return String.format(
@@ -96,6 +102,8 @@ public class Review {
                         "Review: %s \n" +
                         "Ratings: %d \n" +
                         "Review Key: %s \n" +
-                        "Status: %s", getClientID(),getProductName(),getComment(),getRating(),getReviewKey(),getStatus());
+                        "Status: %s \n" +
+                        "User name: %s", getClientID(),getProductName(),getComment(),getRating(),getReviewKey(),
+                getStatus(), getUserName());
     }
 }

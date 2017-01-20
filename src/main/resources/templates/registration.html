@@ -2,16 +2,19 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Registration</title>
+    <title>Registration | Horseshoe Registration Service</title>
+    <link href='http://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+
 </head>
 <body>
 
-    <h1>Registration</h1>
-
     <form id="registration" action="newClient">
-        <input th:name="${'name'}" id="name" type="text"  placeholder="Company name"/>
-        <input th:name="${'email'}" id="email" type="text" placeholder="Company e-mail address"/>
-        <button type="submit" id="save_btn" >Save</button>
+
+        <h1>Horseshoe<br/>Review Services</h1>
+        <input type='text'  th:name="${'name'}" placeholder="Company name" class="fields" required="required"/><br/>
+        <input type='text'  th:name="${'email'}" placeholder="Company e-mail address" class="fields" required="required"/><br/>
+        <button type="submit" id="save" >Save</button>
     </form>
 
 </body>

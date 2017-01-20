@@ -13,6 +13,10 @@ public class RegistrationPageController {
         Map params = new HashMap<>();
         return new ModelAndView(params, "registration");
     }
+    public static ModelAndView renderSuccessPage(Request request, Response response) {
+        Map params = new HashMap<>();
+        return new ModelAndView(params, "success");
+    }
 }
 
 

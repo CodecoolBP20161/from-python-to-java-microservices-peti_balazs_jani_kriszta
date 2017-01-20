@@ -34,7 +34,7 @@ public class Server {
         get("/allReviewOfProduct/:APIKey/:productName", ReviewController::getAllReviewOfProduct);
         get("/", RegistrationPageController::renderRegistrationPage, tmp);
 
-        get("/success",  (req, res) -> "Successful registration");
+        get("/success", RegistrationPageController::renderSuccessPage, tmp);
         get("/newStatus", (req, res) -> "New status of review has been set");
     }
 }
